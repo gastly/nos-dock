@@ -24,7 +24,7 @@ const WorkspaceSettingsWidget = new GObject.Class({
 
     _init: function(params) {
     this.parent(params);
-    this.settings = Convenience.getSettings('org.gnome.shell.extensions.dash-to-dock');
+    this.settings = Convenience.getSettings('org.gnome.shell.extensions.nos-dock');
 
     let notebook = new Gtk.Notebook();
 

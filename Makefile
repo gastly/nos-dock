@@ -4,7 +4,6 @@ UUID = nos-dock@numixproject.org
 BASE_MODULES = extension.js stylesheet.css metadata.json LICENSE README.md
 EXTRA_MODULES = dockedDash.js intellihide.js myDash.js convenience.js prefs.js
 TOLOCALIZE =  prefs.js
-MSGSRC = $(wildcard po/*.po)
 INSTALLBASE = ~/.local/share/gnome-shell/extensions
 INSTALLNAME = nos-dock@numixproject.org
 
@@ -13,7 +12,7 @@ all: extension
 clean:
 	rm -f ./schemas/gschemas.compiled
 
-extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
+extension: ./schemas/gschemas.compiled
 
 ./schemas/gschemas.compiled: ./schemas/org.gnome.shell.extensions.nos-dock.gschema.xml
 	glib-compile-schemas ./schemas/

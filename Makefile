@@ -1,7 +1,7 @@
 # Basic Makefile
 
 UUID = nos-dock@numixproject.org
-BASE_MODULES = extension.js stylesheet.css metadata.json LICENCE README.md
+BASE_MODULES = extension.js stylesheet.css metadata.json LICENSE README.md
 EXTRA_MODULES = dockedDash.js intellihide.js myDash.js convenience.js prefs.js
 TOLOCALIZE =  prefs.js
 MSGSRC = $(wildcard po/*.po)
@@ -17,20 +17,6 @@ extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
 
 ./schemas/gschemas.compiled: ./schemas/org.gnome.shell.extensions.nos-dock.gschema.xml
 	glib-compile-schemas ./schemas/
-
-potfile: ./po/dashtodock.pot
-
-mergepo: potfile
-	for l in $(MSGSRC); do \
-		msgmerge -U $$l ./po/dashtodock.pot; \
-	done;
-
-./po/dashtodock.pot: $(TOLOCALIZE)
-	mkdir -p po
-	xgettext -k_ -kN_ -o po/dashtodock.pot --package-name "Dash to Dock" $(TOLOCALIZE)
-
-./po/%.mo: ./po/%.po
-	msgfmt -c $< -o $@
 
 install: install-local
 

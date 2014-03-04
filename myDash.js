@@ -40,7 +40,7 @@ const myDashActor = new Lang.Class({
     _init: function(settings) {
         this._settings = settings;
         let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
-        this.parent({ name: 'dash',
+        this.parent({ //name: 'dash',               //This will inherit styling from the original gnome dock
                       layout_manager: layout,
                       clip_to_allocation: true });
     },

@@ -8,7 +8,7 @@ const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
 
-const Gettext = imports.gettext.domain('dashtodock');
+const Gettext = imports.gettext.domain('nos-dock');
 const _ = Gettext.gettext;
 const N_ = function(e) { return e };
 

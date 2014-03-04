@@ -65,10 +65,10 @@ dockedDash.prototype = {
 
         // Create the main actor and the main container for centering, turn on track hover
 
-        this._box = new St.BoxLayout({ name: 'dashtodockBox', reactive: true, track_hover:true,
+        this._box = new St.BoxLayout({ name: 'nos-dockBox', reactive: true, track_hover:true,
             style_class: 'box'} );
-        this.actor = new St.Bin({ name: 'dashtodockContainer',reactive: false,
-            style_class: 'container', y_align: St.Align.MIDDLE, child: this._box});
+        this.actor = new St.Bin({ name: 'nos-dockContainer',reactive: false,
+            style_class: 'container', x_align: St.Align.MIDDLE, child: this._box});
 
         this._box.connect("notify::hover", Lang.bind(this, this._hoverChanged));
         this._realizeId = this.actor.connect("realize", Lang.bind(this, this._initialize));
@@ -260,14 +260,14 @@ dockedDash.prototype = {
                 this.emit('box-changed');
             }
 
-            this._updateYPosition();
+            this._updateXPosition();
         }));
         this._settings.connect('changed::autohide', Lang.bind(this, function(){
             this.emit('box-changed');
         }));
-        this._settings.connect('changed::extend-height', Lang.bind(this, this._updateYPosition));
+        this._settings.connect('changed::extend-height', Lang.bind(this, this._updateXPosition));
         this._settings.connect('changed::preferred-monitor', Lang.bind(this,this._resetPosition));
-        this._settings.connect('changed::height-fraction', Lang.bind(this,this._updateYPosition));
+        this._settings.connect('changed::height-fraction', Lang.bind(this,this._updateXPosition));
 
     },
 
@@ -507,7 +507,7 @@ dockedDash.prototype = {
              this._monitor.y == Main.layoutManager.primaryMonitor.y);
     },
 
-    _updateYPosition: function() {
+/*    _updateYPosition: function() {
 
         let unavailableTopSpace = 0;
         let unavailableBottomSpace = 0;
@@ -534,6 +534,47 @@ dockedDash.prototype = {
         this.actor.height = Math.round( fraction * availableHeight);
         this.actor.y = this._monitor.y + unavailableTopSpace + Math.round( (1-fraction)/2 * availableHeight);
         this.actor.y_align = St.Align.MIDDLE;
+
+        if(extendHeight){
+            this.dash._container.set_height(this.actor.height);
+            this.actor.add_style_class_name('extended');
+        } else {
+            this.dash._container.set_height(-1);
+            this.actor.remove_style_class_name('extended');
+        }
+
+        this._updateStaticBox();
+    },
+*/
+
+    //Replaces _updateYPosition()
+     _updateXPosition: function() {
+
+        let unavailableLeftSpace = 0;
+        let unavailableRightSpace = 0;
+
+        let extendHeight = this._settings.get_boolean('extend-height');
+        let dockFixed = this._settings.get_boolean('dock-fixed');
+
+        // check if the dock is on the primary monitor
+        if (this._isPrimaryMonitor()){
+            if (!extendHeight || !dockFixed) {
+                unavailableTopSpace = Main.panel.actor.height;
+            }
+        }
+
+        let availableWidth = this._monitor.width;
+
+        let fraction = this._settings.get_double('height-fraction');
+
+        if(extendHeight)
+            fraction = 1;
+        else if(fraction<0 || fraction >1)
+            fraction = 0.95;
+
+        this.actor.width = Math.round( fraction * availableWidth);
+        this.actor.x = this._monitor.x + Math.round( (1-fraction)/2 * availableWidth);
+        this.actor.x_align = St.Align.MIDDLE;
 
         if(extendHeight){
             this.dash._container.set_height(this.actor.height);
@@ -598,7 +639,7 @@ dockedDash.prototype = {
             this._animateOut(0,0);
             this._animateIn(this._settings.get_double('animation-time'),0);
         }
-        this._updateYPosition();
+        this._updateXPosition();
         this._updateClip();
     },
 

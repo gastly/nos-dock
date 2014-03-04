@@ -47,35 +47,26 @@ const myDashActor = new Lang.Class({
 
     vfunc_allocate: function(box, flags) {
         let contentBox = this.get_theme_node().get_content_box(box);
-        let availWidth = contentBox.x2 - contentBox.x1;
+        let availHeight = contentBox.y2 - contentBox.y1;
 
         this.set_allocation(box, flags);
 
         let [appIcons, showAppsButton] = this.get_children();
-        let [showAppsMinHeight, showAppsNatHeight] = showAppsButton.get_preferred_height(availWidth);
+        let [showAppsMinWidth, showAppsNatWidth] = showAppsButton.get_preferred_width(availHeight);
 
-        let childBox = new Clutter.ActorBox();
-        if( this._settings.get_boolean('show-apps-at-top') ) {
-            childBox.x1 = contentBox.x1;
-            childBox.y1 = contentBox.y1 + showAppsNatHeight;
-            childBox.x2 = contentBox.x2;
-            childBox.y2 = contentBox.y2;
-            appIcons.allocate(childBox, flags);
+        let appBox = new Clutter.ActorBox();
+        appBox.x1 = contentBox.x1;
+        appBox.y1 = contentBox.y1;
+        appBox.x2 = contentBox.x2 - showAppsNatWidth;
+        appBox.y2 = contentBox.y2;
+        appIcons.allocate(appBox, flags);
 
-            childBox.y1 = contentBox.y1;
-            childBox.y2 = contentBox.y1 + showAppsNatHeight;
-            showAppsButton.allocate(childBox, flags);
-        } else {
-            childBox.x1 = contentBox.x1;
-            childBox.y1 = contentBox.y1;
-            childBox.x2 = contentBox.x2;
-            childBox.y2 = contentBox.y2 - showAppsNatHeight;
-            appIcons.allocate(childBox, flags);
-
-            childBox.y1 = contentBox.y2 - showAppsNatHeight;
-            childBox.y2 = contentBox.y2;
-            showAppsButton.allocate(childBox, flags);
-        }
+        let menuBox = new Clutter.ActorBox();
+        menuBox.x1 = appBox.x2;
+        menuBox.y1 = contentBox.y1;
+        menuBox.x2 = appBox.x2 + showAppsNatWidth;
+        menuBox.y2 = contentBox.y2;
+        showAppsButton.allocate(menuBox, flags);
     },
 
     vfunc_get_preferred_height: function(forWidth) {

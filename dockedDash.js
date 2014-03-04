@@ -553,21 +553,21 @@ dockedDash.prototype = {
         let unavailableLeftSpace = 0;
         let unavailableRightSpace = 0;
 
-        let extendHeight = this._settings.get_boolean('extend-height');
+        let extendWidth = this._settings.get_boolean('extend-height'); //TODO: change schema to extend-width
         let dockFixed = this._settings.get_boolean('dock-fixed');
 
         // check if the dock is on the primary monitor
         if (this._isPrimaryMonitor()){
-            if (!extendHeight || !dockFixed) {
-                unavailableTopSpace = Main.panel.actor.height;
+            if (!extendWidth || !dockFixed) {
+                unavailableLeftSpace = 0;
             }
         }
 
         let availableWidth = this._monitor.width;
 
-        let fraction = this._settings.get_double('height-fraction');
+        let fraction = this._settings.get_double('height-fraction'); //TODO: change schema to width-fraction
 
-        if(extendHeight)
+        if(extendWidth)
             fraction = 1;
         else if(fraction<0 || fraction >1)
             fraction = 0.95;
@@ -576,7 +576,7 @@ dockedDash.prototype = {
         this.actor.x = this._monitor.x + Math.round( (1-fraction)/2 * availableWidth);
         this.actor.x_align = St.Align.MIDDLE;
 
-        if(extendHeight){
+        if(extendWidth){
             this.dash._container.set_height(this.actor.height);
             this.actor.add_style_class_name('extended');
         } else {
@@ -615,10 +615,10 @@ dockedDash.prototype = {
     _updateStaticBox: function() {
 
         this.staticBox.init_rect(
-            this._monitor.x + (this._rtl?(this._monitor.width - this._box.width):0),
-            this.actor.y + this._box.y,
-            this._box.width,
-            this._box.height
+            this._monitor.y + (this._rtl?(this._monitor.height - this._box.height):0),
+            this.actor.x + this._box.x,
+            this._box.height,
+            this._box.width
         );
 
         // If allocation is changed, probably also the clipping has to be updated.

@@ -127,7 +127,7 @@ const myDash = new Lang.Class({
         this._labelShowing = false;
 
         this._container = new myDashActor(settings);
-        this._box = new St.BoxLayout({ vertical: true,
+        this._box = new St.BoxLayout({ vertical: false,
                                        clip_to_allocation: true });
         this._box._delegate = this;
         this._container.add_actor(this._box);

@@ -84,7 +84,7 @@ dockedDash.prototype = {
 
         // this store size and the position where the dash is shown;
         // used by intellihide module to check window overlap.
-        this.staticBox = new Clutter.ActorBox({x1:0, y1:0, x2:100, y2:500});
+        this.staticBox = new Clutter.ActorBox({x1:0, y1:0, x2:500, y2:100});
 
         // Connect global signals
         this._signalHandler.push(

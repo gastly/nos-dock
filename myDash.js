@@ -34,15 +34,17 @@ let DASH_ITEM_HOVER_TIMEOUT = Dash.DASH_ITEM_HOVER_TIMEOUT;
  *
  */
 const myDashActor = new Lang.Class({
-    Name: 'DashToDockmyDashActor',
+    Name: 'Nos-DockmyDashActor',
     Extends: St.Widget,
 
     _init: function(settings) {
         this._settings = settings;
-        let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
+        let layout = new Clutter.BoxLayout({ orientation: Clutter.Orientation.HORIZONTAL });
         this.parent({ //name: 'dash',               //This will inherit styling from the original gnome dock
                       layout_manager: layout,
-                      clip_to_allocation: true });
+                      clip_to_allocation: true
+                       });
+        this.set_anchor_point(0,0);
     },
 
     vfunc_allocate: function(box, flags) {
@@ -98,7 +100,7 @@ const myDashActor = new Lang.Class({
  *
  */
 const myDash = new Lang.Class({
-    Name: 'dashToDock.myDash',
+    Name: 'Nos-Dock.myDash',
 
     _init : function(settings) {
         this._maxHeight = -1;

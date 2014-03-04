@@ -60,6 +60,9 @@ dockedDash.prototype = {
         this.dash = new MyDash.myDash(this._settings); // this.dash = new MyDash.myDash();
         this.forcedOverview = false;
 
+        // Put dock on the primary monitor
+        this._monitor = Main.layoutManager.primaryMonitor;
+
         // connect app icon into the view selector
         this.dash.showAppsButton.connect('notify::checked', Lang.bind(this, this._onShowAppsButtonToggled));
 
@@ -74,13 +77,14 @@ dockedDash.prototype = {
         this._realizeId = this.actor.connect("realize", Lang.bind(this, this._initialize));
 
         // Create and apply height constraint to the dash. It's controlled by this.actor height
-        this.actor.height = Main.overview.viewSelector.actor.height; // Guess initial reasonable height.
+        this.actor.width = this._monitor.width; //Main.overview.viewSelector.actor.height; // Guess initial reasonable height.
+        this.actor.height = 64;
+        this.actor.set_y(this._monitor.height-this.actor.height);
         this.constrainHeight = new Clutter.BindConstraint({ source: this.actor,
                                                             coordinate: Clutter.BindCoordinate.HEIGHT });
         this.dash.actor.add_constraint(this.constrainHeight);
 
-        // Put dock on the primary monitor
-        this._monitor = Main.layoutManager.primaryMonitor;
+        
 
         // this store size and the position where the dash is shown;
         // used by intellihide module to check window overlap.
@@ -242,7 +246,7 @@ dockedDash.prototype = {
         }));
 
         this._settings.connect('changed::show-running', Lang.bind(this, function(){
-            this.dash.resetAppIcons();
+            this.dash.resetAppIcons();f
         }));
 
         this._settings.connect('changed::show-apps-at-top', Lang.bind(this, function(){
